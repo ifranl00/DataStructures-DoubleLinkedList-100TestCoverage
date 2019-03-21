@@ -7,8 +7,8 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	/**
 	 * Nodo doblemente enlazado.
 	 * 
-	 * Como es estática, no tiene en ámbito el parámetro 'T' de la
-	 * clase que la contiene. El parámetro 'D' será sustituído por
+	 * Como es estÃ¡tica, no tiene en Ã¡mbito el parÃ¡metro 'T' de la
+	 * clase que la contiene. El parÃ¡metro 'D' serÃ¡ sustituÃ­do por
 	 * un tipo particular cuando se use el nodo, por ejemplo:
 	 * 
 	 * 		DoubleNode<T> cab;
@@ -34,8 +34,8 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	}
 
 	/**
-	 * Apunta al nodo cabecera; siempre habrá un nodo vacío (sin elemento) que actua de cabecera
-	 *  OJO!!! ESTE NODO CABECERA DEBERÁ CREARSE EN CADA CONSTRUCTOR DE LA LISTA
+	 * Apunta al nodo cabecera; siempre habrÃ¡ un nodo vacÃ­o (sin elemento) que actua de cabecera
+	 *  OJO!!! ESTE NODO CABECERA DEBERÃ� CREARSE EN CADA CONSTRUCTOR DE LA LISTA
 	 */
 	private DoubleNode<T> cab;
 	
@@ -47,29 +47,42 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	
 	
 	/**
-	 * Construye una lista vacía.
+	 * Construye una lista vacÃ­a.
 	 */
 	public DoubleLinkedListImpl() {
-		//TODO
-		// Deberá crear el nodo cabecera vacío
+		// DeberÃ¡ crear el nodo cabecera vacÃ­o
+		cab = new DoubleNode<T>(null);
+		cab.previous = cab;
+		cab.next = cab;
 	
 	}
 	
 	/**
 	 * Construye una lista con los elementos dados.
 	 * 
-	 * Java creará un array 'elements' con los dados en la
+	 * Java crearÃ¡ un array 'elements' con los dados en la
 	 * llamada al constructor; por ejemplo:
 	 * 
 	 * 	x = new DoubleLinkedList<String>("A", "B", "C");
 	 * 
-	 * ejecuta este método con un array [A, B, C] en 
+	 * ejecuta este mÃ©todo con un array [A, B, C] en 
 	 * 'elements'.
 	 * 
 	 * @param elements
 	 */
 	public DoubleLinkedListImpl(T ... elements) {
 		//TODO
+		
+		for( T element : elements) {
+			
+			if(this.isEmpty() == true) {
+				
+				addFirst(element);
+			}else {
+				
+				addLast(element);
+			}
+		}
 	
 	}
 	
@@ -81,6 +94,18 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	 */
 	public DoubleLinkedListImpl(DoubleLinkedList<T> other) {
 		//TODO
+		for( T element : other) {
+			
+			if(this.isEmpty() == true) {
+				
+				addFirst(new DoubleNode<T>(element).content);
+				
+			}else {
+				
+				addLast(new DoubleNode<T>(element).content);
+			}
+		}
+		
 	}
 	
 
@@ -177,8 +202,16 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	
 	@Override
 	public boolean isEmpty() {
-		return false;
 		// TODO Auto-generated method stub
+		if(size() == 0) {
+			
+			return true;
+		}else {
+			
+			return false;
+		}
+		
+		
 	
 		
 	}
@@ -299,7 +332,7 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	
 
 	///////////////////////////////////////////
-	  // métodos que devuelve iteradores
+	  // mÃ©todos que devuelve iteradores
 	 ///////////////////////////////////////
 	@Override
 	public Iterator<T> oddAndEvenIterator() {
