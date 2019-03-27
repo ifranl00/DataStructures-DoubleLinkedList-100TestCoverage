@@ -212,6 +212,7 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 		 private DoubleNode<T> oddIter;
 		 private DoubleNode<T> evenIter;
 		 private DoubleNode<T> iter;
+		 private int nRound;
 		
 		
 		public OddAndEvenIterator(){
@@ -219,6 +220,13 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 			iter = cab.next;
 			oddIter = cab.next;
 			evenIter = cab.next.next;
+			if(isEmpty() == true) {
+				
+				nRound = 1;
+			}else if(size() == 1){
+				
+				nRound = 1;
+			}
 		}
 		
 		
@@ -227,11 +235,16 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 			
 			boolean hasNext = false;
 			
-			if(iter != cab) {
+			
+			if(iter == cab && nRound == 1) {
+				
+				hasNext = false;
+				
+			}else if(iter != cab) {
 				
 				hasNext = true;
 			}
-		
+			
 			return hasNext;
 		}
 		
@@ -240,17 +253,44 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 		public T next() {
 			
 			T element = null;
-			int nRound = 0;
 			
 			if(hasNext() == false) {
 				
 				throw new NoSuchElementException();
 			}else {
 				
+				if(nRound == 0 && iter != cab ) { //La vuelta 0 es la que devuelve los pares
+					
+					element = iter.next.content; 
+					
+					if(iter.next != cab) {
+					
+						iter = iter.next.next; //avanza de dos en dos
+						
+					}else {
+						
+						iter = cab.next;
+						nRound = 1;
+					}
 				
-				element = iter.content;
+				}else if (iter == cab || size() == 1) { //acabo la vuelta de los pares o solo hay un elemento (impar)
+					
+					nRound = 1; //pasamos a la vuelta 1 que es la de los impares
+					iter = cab.next; //volvemos a situar nuestro auxiliar
+				}
+				
+				if(nRound == 1 && iter != cab) { //vuelta 1 de los impares
+					
+					element = iter.content;
+					iter = iter.next.next; //avanza de dos en dos
+					
+				}
+				
+				
+				/*
+				element = iter.next.content;
 				iter = iter.next;
-				
+				*/
 				
 			}
 			
