@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.junit.*;
-
+import static org.junit.Assert.*;
 
 public class DoubleLinkedListImplTests {
 
@@ -85,4 +85,34 @@ public class DoubleLinkedListImplTests {
 		Assert.assertFalse(i.hasNext());
 		i.next();
 	}
+	
+	@Test
+	public void testSize() {
+		
+	}
+	
+	@Test
+	public void testEmpty() {
+		
+	}
+	
+	@Test
+	public void testAddFirstEmpty() {
+		
+		String t1 = "Soyeon";
+		assertTrue(lS.isEmpty());
+		lS.addFirst(t1);
+		assertEquals(lS.toString(), "[Soyeon]");
+	}
+	
+	@Test
+	public void testAddFirstNotEmpty() {
+		
+		String t1 = "Soyeon";
+		
+		lSABC.addFirst(t1);
+		assertEquals(lSABC.toString(), "[Soyeon, A, B, C]");
+	}
+
+	
 }
