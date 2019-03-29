@@ -190,10 +190,11 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 			if(hasNext() == false) {
 				
 				throw new NoSuchElementException();
+				
 			}else {
 				
 				element = at.content;
-				at = at.next;
+				at = at.previous;
 			}
 			
 			return element;
@@ -381,27 +382,33 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	@Override
 	public void addAtPos(T element, int p) {
 		
-		DoubleNode<T> aux = cab.next;
-		
-		int i = 0;
-		
-		if(p > size()) { 
+		if(p < 1) {
 			
-			addLast(element);
+			throw new IllegalArgumentException();
 			
 		}else {
+		
+			DoubleNode<T> aux = cab.next;
+			int i = 0;
+		
+			if(p > size()) { 
 			
-			DoubleNode<T> n = new DoubleNode<T>(element);
+				addLast(element);
 			
-			while(i + 1 < p) {
+			}else {
+			
+				DoubleNode<T> n = new DoubleNode<T>(element);
+			
+				while(i + 1 < p) {
 				
-				aux = aux.next; //para en el nodo en posicion p
-				i++;
-			}
+					aux = aux.next; //para en el nodo en posicion p
+					i++;
+				}
 			
-			n.previous = aux.previous;
-			n.next = aux;
-			aux.previous.next = n;
+				n.previous = aux.previous;
+				n.next = aux;
+				aux.previous.next = n;
+			}
 		}
 		
 	}
@@ -409,37 +416,125 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	@Override
 	public void addNTimes(T element, int n) {
 		
-		
 		for(int i = 0; i < n; i++) {
 			
 			addLast(element);
 		}
-			
-		
 	}
 
 	@Override
 	public T getElem(int p) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(p < 1) {
+			
+			throw new IllegalArgumentException();
+			
+		}else if(size() < p){
+			
+			throw new IndexOutOfBoundsException();
+			
+		}else {
+			
+			DoubleNode<T> aux = cab.next;
+			int i = 0;
+			
+			while(i + 1 < p) {
+				
+				aux = aux.next; //para en el nodo en posicion p
+				i++;
+			}
+			
+			return aux.content;
+		}
 	}
 
 	@Override
 	public void setElem(T elem, int p) {
-		// TODO Auto-generated method stub
 		
+		if(size() < p) {
+			
+			throw new IndexOutOfBoundsException();
+			
+		}else {
+			
+			DoubleNode<T> aux = cab.next;
+			int i = 0;
+			
+			while(i + 1 < p) {
+				
+				aux = aux.next; //para en el nodo en posicion p
+				i++;
+			}
+			
+			aux.content = elem;
+		}
 	}
 
 	@Override
 	public int indexOf(T elem) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		DoubleNode<T> aux = cab.next;
+		int i = 1;
+		int pos = 0;
+		
+		while(aux.next != cab && pos == 0) {
+			
+			if(aux.content.equals(elem)) {
+				
+				pos = i;
+						
+			}else {
+				
+				aux = aux.next;
+				i++;
+			}
+				
+		}
+		if(aux.next == cab) { //se ha llegado al final de la lista
+			
+			throw new NoSuchElementException();
+		}
+		return pos;
 	}
 
 	@Override
 	public int indexOf(T elem, int p) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int pos = 0;
+		
+		if(size() < p) {
+			
+			throw new IndexOutOfBoundsException();
+			
+		}else {
+			
+			DoubleNode<T> aux = cab.next;
+			int i = 1;
+			
+			while(i < p && aux!= cab) {
+				
+				aux = aux.next; //para donde tiene que empezar a buscar
+			}
+			
+			while(aux.next != cab && pos == 0) {
+				
+				if(aux.content.equals(elem)) {
+					
+					pos = i;
+					
+				}else {
+					
+					aux = aux.next;
+					i++;
+				}
+			}
+			
+			if(aux.next == cab) { //se ha llegado al final de la lista
+				
+				throw new NoSuchElementException();
+			}
+		}	
+		return pos;
 	}
 
 	@Override
