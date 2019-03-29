@@ -209,8 +209,6 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 		private class OddAndEvenIterator implements Iterator<T> {
 
 		// Definir los atributos necesarios para implementar el iterador
-		 private DoubleNode<T> oddIter;
-		 private DoubleNode<T> evenIter;
 		 private DoubleNode<T> iter;
 		 private int nRound;
 		
@@ -218,8 +216,6 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 		public OddAndEvenIterator(){
 			
 			iter = cab.next;
-			oddIter = cab.next;
-			evenIter = cab.next.next;
 			if(isEmpty() == true) {
 				
 				nRound = 1;
@@ -236,11 +232,11 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 			boolean hasNext = false;
 			
 			
-			if(iter == cab && nRound == 1) {
+			if((iter == cab && nRound == 1) || (nRound == 2)) {
 				
 				hasNext = false;
 				
-			}else if(iter != cab) {
+			}else {
 				
 				hasNext = true;
 			}
@@ -269,28 +265,23 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 						
 					}else {
 						
-						iter = cab.next;
-						nRound = 1;
+						iter = cab.next; //posicionamos el iterador
+						nRound = 1; //ya acabo la vuelta de los pares y empieza la de los impares
 					}
 				
-				}else if (iter == cab || size() == 1) { //acabo la vuelta de los pares o solo hay un elemento (impar)
-					
-					nRound = 1; //pasamos a la vuelta 1 que es la de los impares
-					iter = cab.next; //volvemos a situar nuestro auxiliar
 				}
-				
 				if(nRound == 1 && iter != cab) { //vuelta 1 de los impares
 					
 					element = iter.content;
-					iter = iter.next.next; //avanza de dos en dos
 					
+					if(iter.next != cab) {
+						
+						iter = iter.next.next; //avanza de dos en dos
+					}else {
+						
+						nRound = 2; //ya se han finalizado las vueltas
+					}
 				}
-				
-				
-				/*
-				element = iter.next.content;
-				iter = iter.next;
-				*/
 				
 			}
 			
@@ -328,31 +319,102 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		int size = 0;
+		
+		DoubleNode<T> aux = cab.next;
+		while(aux != cab) {
+			
+			size++;
+			aux = aux.next;
+		}
+		
+		return size;
 	}
 	
 	@Override
 	public void addFirst(T element) {
-		// TODO Auto-generated method stub
+		
+		DoubleNode<T> n = new DoubleNode<T>(element);
+		
+		if(isEmpty() == true) {
+			
+			cab.next = n;
+			n.next = cab;
+			n.previous = cab;
+			cab.previous = n;
+			
+		}else {
+			
+			n.next = cab.next;
+			cab.next.previous = n;
+			n.previous = cab;
+			cab.next = n;
+			
+		}
 		
 	}
 
 	@Override
 	public void addLast(T element) {
-		// TODO Auto-generated method stub
+		
+		DoubleNode<T> n = new DoubleNode<T>(element);
+		
+		if(isEmpty() == true) {
+			
+			cab.next = n;
+			n.next = cab;
+			n.previous = cab;
+			cab.previous = n;
+			
+		}else {
+			
+			n.next = cab;
+			n.previous = cab.previous;
+			cab.previous.next = n;
+			cab.previous = n;
+			
+		}
+		
 		
 	}
 
 	@Override
 	public void addAtPos(T element, int p) {
-		// TODO Auto-generated method stub
+		
+		DoubleNode<T> aux = cab.next;
+		
+		int i = 0;
+		
+		if(p > size()) { 
+			
+			addLast(element);
+			
+		}else {
+			
+			DoubleNode<T> n = new DoubleNode<T>(element);
+			
+			while(i + 1 < p) {
+				
+				aux = aux.next; //para en el nodo en posicion p
+				i++;
+			}
+			
+			n.previous = aux.previous;
+			n.next = aux;
+			aux.previous.next = n;
+		}
 		
 	}
 
 	@Override
 	public void addNTimes(T element, int n) {
-		// TODO Auto-generated method stub
+		
+		
+		for(int i = 0; i < n; i++) {
+			
+			addLast(element);
+		}
+			
 		
 	}
 
@@ -446,10 +508,7 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	 ///////////////////////////////////////
 	@Override
 	public Iterator<T> oddAndEvenIterator() {
-		return null;
-		// TODO Auto-generated method stub
-		
-		
+		return new OddAndEvenIterator();
 	}
 
 	 @Override
@@ -460,8 +519,7 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 
 		@Override
 		public Iterator<T> reverseIterator() {
-			// TODO Auto-generated method stub
-			return null;
+			return new reverseIterator();
 		}
 
 		

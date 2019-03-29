@@ -62,7 +62,7 @@ public class DoubleLinkedListImplTests {
 	}
 	
 	@Test
-	public void testOddAndEvenIt() {
+	public void testOddAndEvenItOk() {
 		lS = new DoubleLinkedListImpl<>("A", "B", "C", "D", "E");
 		Iterator<String> i = lS.oddAndEvenIterator();
 		Assert.assertTrue(i.hasNext());
@@ -77,6 +77,20 @@ public class DoubleLinkedListImplTests {
 		Assert.assertEquals("E", i.next());
 		Assert.assertFalse(i.hasNext());
 	    Assert.assertEquals("[A, B, C, D, E]", lS.toString());
+	}
+	
+	@Test 
+	public void testOddAndEvenItSize1() {
+		
+		String t1 = "Soyeon";
+		
+		
+		lS.addFirst(t1);
+		Iterator<String> i = lS.oddAndEvenIterator();
+		Assert.assertTrue(i.hasNext());
+		Assert.assertEquals("Soyeon", i.next());
+		Assert.assertFalse(i.hasNext());
+	
 	}
 	
 	@Test(expected = NoSuchElementException.class)
@@ -112,6 +126,55 @@ public class DoubleLinkedListImplTests {
 		
 		lSABC.addFirst(t1);
 		assertEquals(lSABC.toString(), "[Soyeon, A, B, C]");
+	}
+
+	@Test
+	public void testAddLastEmpty() {
+		
+		String t1 = "Soyeon";
+		assertTrue(lS.isEmpty());
+		lS.addLast(t1);
+		assertEquals(lS.toString(), "[Soyeon]");
+		
+	}
+	
+	@Test
+	public void testAddLastNotEmpty() {
+		
+		String t1 = "Soyeon";
+		
+		lSABC.addLast(t1);
+		assertEquals(lSABC.toString(), "[A, B, C, Soyeon]");
+	}
+	
+	@Test
+	public void testAddAtPosPosMayorQueSize() {
+		
+		String t1 = "Soyeon";
+		
+		lSABC.addAtPos(t1,4);
+		assertEquals(lSABC.toString(), "[A, B, C, Soyeon]");
+		
+	}
+	
+	@Test
+	public void testAddAtPosOk() {
+		
+		String t1 = "Soyeon";
+		
+		lSABC.addAtPos(t1,2);
+		assertEquals(lSABC.toString(), "[A, Soyeon, B, C]");
+		
+	}
+	
+	@Test
+	public void testAddNTimes() {
+		
+		String t1 = "Soyeon";
+		
+		lSABC.addNTimes(t1,2);
+		assertEquals(lSABC.toString(), "[A, B, C, Soyeon, Soyeon]");
+		
 	}
 
 	
