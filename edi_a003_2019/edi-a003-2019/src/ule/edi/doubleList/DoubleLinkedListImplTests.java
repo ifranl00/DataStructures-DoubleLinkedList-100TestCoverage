@@ -286,23 +286,22 @@ public class DoubleLinkedListImplTests {
 	@Test(expected = NoSuchElementException.class)
 	public void testIndexOfElemNotFound() {
 		
-		lS = new DoubleLinkedListImpl<String>("A", "B", "C", "D");
-		
-		lS.indexOf("E");
+		lSABC.indexOf("E");	
 	}
 	
 	@Test 
-	public void testIndexOfElemOk() {
+	public void testIndexOfElemOk(){
 
 		assertEquals(2,lSABC.indexOf("B"));
 		assertEquals(1,lSABCDE.indexOf("A"));
+		assertEquals(3,lSABCDE.indexOf("C"));
 		
 	}
 	
 	@Test(expected = NoSuchElementException.class)
 	public void testIndexOfElemPosNotFound() {
 		
-		lSABC.indexOf("F", 1);
+		lSABC.indexOf("A", 3);
 	}
 	
 	@Test(expected = IndexOutOfBoundsException.class)
@@ -316,10 +315,37 @@ public class DoubleLinkedListImplTests {
 		
 		assertEquals(2,lSABC.indexOf("B", 1));
 		assertEquals(1,lSABCDE.indexOf("A", 1));
-		assertEquals(1,lSABCDE.indexOf("E", 2));
-		
-		
+		assertEquals(3,lSABCDE.indexOf("C", 3));
 	}
 	
+	@Test(expected = EmptyCollectionException.class)
+	public void testRemoveFirstEmpty() throws EmptyCollectionException {
+		
+		String t1 = "Soyeon";
+		lS.removeFirst(t1);
+	}
+	
+	@Test
+	public void testRemoveFirstOk() throws EmptyCollectionException {
+		
+		assertEquals("A", lSABC.removeFirst("A"));
+		assertEquals("C",lSABCDE.removeFirst("C"));
+	}
+	
+	@Test(expected = EmptyCollectionException.class)
+	public void testRemoveAllEmpty() throws EmptyCollectionException {
+		
+		String t1 = "Soyeon";
+		lS.removeAll(t1);
+	}
+	
+	@Test
+	public void testRemoveAllOk() throws EmptyCollectionException {
+		
+		lS = new DoubleLinkedListImpl<String>("A", "B", "C", "D", "C");
+		assertEquals(3, lS.indexOf("C"));
+		assertEquals("C", lS.removeAll("C"));
+		assertEquals("[A,B,D]", lS.toString());
+	}
 	
 }

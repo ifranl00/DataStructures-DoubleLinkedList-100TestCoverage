@@ -511,9 +511,10 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 			DoubleNode<T> aux = cab.next;
 			int i = 1;
 			
-			while(i < p && aux!= cab) {
+			while(i < p && aux.next != cab) {
 				
 				aux = aux.next; //para donde tiene que empezar a buscar
+				i++;
 			}
 			
 			while(aux.next != cab && pos == 0) {
@@ -539,15 +540,55 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 
 	@Override
 	public T removeFirst(T elem) throws EmptyCollectionException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(isEmpty() == true) {
+			
+			throw new EmptyCollectionException("The list is empty");
+			
+		}else {
+			
+			DoubleNode<T> aux = cab.next;
+			int i = 1;
+			T e = null;
+			
+			while(i < indexOf(elem)) {
+				
+				aux = aux.next;
+				i++;
+			}
+			
+			e = aux.content;
+			aux.previous.next = aux.next;
+			aux.next.previous = aux.previous;
+			return e;
+
+		}
+		
 	}
 
 	@Override
 	public T removeAll(T elem) throws EmptyCollectionException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		T e = null;
+		
+		if(isEmpty() == true) {
+			
+			throw new EmptyCollectionException("The list is empty");
+			
+		}else {
+
+			int i = 0;
+			
+			while(i < size() && indexOf(elem) > 0) {
+				
+				e = removeFirst(elem);
+				i++;
+			}
+			
+		}
+		return e;
 	}
+	
 	@Override
 	public T removeLast() {
 		// TODO Auto-generated method stub
