@@ -473,24 +473,22 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	@Override
 	public int indexOf(T elem) {
 		
-		DoubleNode<T> aux = cab.next;
+		Iterator<T> iter = iterator();
 		int i = 1;
 		int pos = 0;
 		
-		while(aux.next != cab && pos == 0) {
+		while(iter.hasNext() && pos == 0) {
 			
-			if(aux.content.equals(elem)) {
+			if(iter.next().equals(elem)) {
 				
 				pos = i;
 						
 			}else {
-				
-				aux = aux.next;
 				i++;
 			}
 				
 		}
-		if(aux.next == cab) { //se ha llegado al final de la lista
+		if(pos == 0) { //se ha llegado al final de la lista
 			
 			throw new NoSuchElementException();
 		}
@@ -530,7 +528,15 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 				}
 			}
 			
-			if(aux.next == cab) { //se ha llegado al final de la lista
+			if(aux.next == cab) { //estamos en el ultimo elemento
+				
+				if(aux.content.equals(elem)) {
+					
+					pos = i;
+				}
+			}
+			
+			if(pos == 0) { //se ha llegado al final de la lista
 				
 				throw new NoSuchElementException();
 			}
@@ -579,10 +585,29 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 
 			int i = 0;
 			
-			while(i < size() && indexOf(elem) > 0) {
+			DoubleNode<T> aux = cab.next;
+			
+			while(aux.next != cab) {
+				
+				if(aux.content.equals(elem)) {
+					
+					i++;//contamos cuantas veces aparece el elemento
+				}
+				aux = aux.next;
+			}
+			
+			if(aux.next == cab) { //estamos en el ultimo elemento
+				
+				if(aux.content.equals(elem)) {
+					
+					i++;
+				}
+			}
+			
+			while(i > 0 && indexOf(elem) > 0) {
 				
 				e = removeFirst(elem);
-				i++;
+				i--; 
 			}
 			
 		}
@@ -590,30 +615,103 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	}
 	
 	@Override
-	public T removeLast() {
-		// TODO Auto-generated method stub
-		return null;
+	public T removeLast() throws EmptyCollectionException {
+		
+		T e = null;
+		
+		if(isEmpty() == true) {
+			
+			throw new EmptyCollectionException("The list is empty");
+			
+		}else {
+			
+			DoubleNode<T> aux = cab.next;
+			
+			while(aux.next != cab) {
+				
+				aux = aux.next;
+			}
+			e = aux.content;
+			aux.previous.next = aux.next;
+			aux.next.previous = aux.previous;
+			
+		}
+		return e;
 	}
-	
-	
 	
 
 	@Override
 	public void reverse() {
-		// TODO Auto-generated method stub
 		
+		DoubleLinkedListImpl<T> other = new DoubleLinkedListImpl<>();
+		Iterator<T> iter = reverseIterator();
+		
+		while(iter.hasNext()) {
+			
+			other.addLast(iter.next());
+		}
+		
+		cab = other.cab;
 	}
 
 	@Override
 	public int isSubList(DoubleLinkedList<T> part) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		DoubleLinkedListImpl<T> other = new DoubleLinkedListImpl<>(part);
+		DoubleNode<T> aux0 = cab.next;
+		DoubleNode<T> aux1 = other.cab.next;
+		DoubleNode<T> aux2 = cab.next;
+		
+		int nMovs = 0; //contamos las veces que se mueve aux1 para saber si coincide con el size de esa lista
+		int pos = -1;
+		
+		if(other.isEmpty()) {
+			
+			pos = 1;
+			
+		}else {
+			
+			while(aux0 != cab) { //hasta que llegue al final de la lista
+			
+				while(aux0.content.equals(aux1.content)) { //comparamos para encontrar el posible comienzo de una sublista
+				
+					aux0 = aux0.next;
+					aux1 = aux1.next;
+					nMovs++;
+				
+					if(nMovs == other.size()) {
+					
+						while(aux0.previous != cab && nMovs > 0) {
+						
+							aux0 = aux0.previous;
+							nMovs--;
+						}
+					
+						while(aux2.next != cab && aux2 != aux1) {
+						
+							aux2 = aux2.next;
+							pos++;
+						}
+					}
+				}
+				
+				aux0 = aux0.next;
+			}
+		}
+		
+		return pos;
 	}
 
 	@Override
 	public void interlace(DoubleLinkedList<T> other) {
-		// TODO Auto-generated method stub
 		
+		int i = 1;
+	
+			while(other.iterator().hasNext() && i < other.size()) {
+				
+				addAtPos(other.iterator().next(), i + 1);
+				i++;
+			}
 	}	
 	
 	@Override

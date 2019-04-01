@@ -293,6 +293,7 @@ public class DoubleLinkedListImplTests {
 	public void testIndexOfElemOk(){
 
 		assertEquals(2,lSABC.indexOf("B"));
+		assertEquals(3,lSABC.indexOf("C"));
 		assertEquals(1,lSABCDE.indexOf("A"));
 		assertEquals(3,lSABCDE.indexOf("C"));
 		
@@ -301,7 +302,7 @@ public class DoubleLinkedListImplTests {
 	@Test(expected = NoSuchElementException.class)
 	public void testIndexOfElemPosNotFound() {
 		
-		lSABC.indexOf("A", 3);
+		lSABC.indexOf("F", 3);
 	}
 	
 	@Test(expected = IndexOutOfBoundsException.class)
@@ -314,6 +315,7 @@ public class DoubleLinkedListImplTests {
 	public void testIndexOutOfElemPosOk() {
 		
 		assertEquals(2,lSABC.indexOf("B", 1));
+		assertEquals(3,lSABC.indexOf("C", 1));
 		assertEquals(1,lSABCDE.indexOf("A", 1));
 		assertEquals(3,lSABCDE.indexOf("C", 3));
 	}
@@ -342,10 +344,66 @@ public class DoubleLinkedListImplTests {
 	@Test
 	public void testRemoveAllOk() throws EmptyCollectionException {
 		
-		lS = new DoubleLinkedListImpl<String>("A", "B", "C", "D", "C");
-		assertEquals(3, lS.indexOf("C"));
-		assertEquals("C", lS.removeAll("C"));
-		assertEquals("[A,B,D]", lS.toString());
+		lS = new DoubleLinkedListImpl<String>("A", "B", "B");
+		
+		assertEquals("B", lS.removeAll("B"));
+		assertEquals("[A]", lS.toString());
 	}
+	
+	@Test(expected = EmptyCollectionException.class)
+	public void testRemoveLastEmpty() throws EmptyCollectionException {
+		
+		lS.removeLast();
+	}
+	
+	@Test
+	public void testRemoveLast() throws EmptyCollectionException {
+		
+		assertEquals("C", lSABC.removeLast());
+		assertEquals("E", lSABCDE.removeLast());
+		
+	}
+	
+	@Test
+	public void testReverse() {
+		
+		lSABC.reverse();
+		assertEquals("[C, B, A]", lSABC.toString());
+		lSABCDE.reverse();
+		assertEquals("[E, D, C, B, A]", lSABCDE.toString());
+	}
+	
+	
+	@Test
+	public void testInterlace() {
+		
+		lS = new DoubleLinkedListImpl<String>("M", "A", "N", "U");
+		lSABC.interlace(lS);
+		assertEquals("[A, M, B, A, C, N, U]", lSABC.toString());
+	}
+	
+	@Test
+	public void testIsSublistEmpty() {
+		
+		assertEquals(1, lSABC.isSubList(lS));
+	}
+	
+	@Test
+	public void testIsSublistNotFound() {
+		
+		lS = new DoubleLinkedListImpl<String>("M", "A", "N", "U");
+		assertEquals(-1, lSABC.isSubList(lS));
+	}
+	
+	@Test
+	public void testIsSublistOk() {
+		
+		lS = new DoubleLinkedListImpl<String>("A", "B");
+		DoubleLinkedListImpl<String> manu =  new DoubleLinkedListImpl<String>("B", "C");
+		assertEquals(1, lSABC.isSubList(lS));
+		assertEquals(2, lSABC.isSubList(manu));
+		
+	}
+	
 	
 }
