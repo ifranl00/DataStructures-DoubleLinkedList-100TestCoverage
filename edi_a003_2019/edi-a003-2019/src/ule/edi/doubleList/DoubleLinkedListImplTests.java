@@ -392,8 +392,11 @@ public class DoubleLinkedListImplTests {
 	public void testIsSublistNotFound() {
 		
 		lS = new DoubleLinkedListImpl<String>("M", "A", "N", "U");
+		lSABCDE = new DoubleLinkedListImpl<>("A", "C");
 		assertEquals(-1, lSABC.isSubList(lS));
+		assertEquals(-1, lSABC.isSubList(lSABCDE));
 	}
+	
 	
 	@Test
 	public void testIsSublistOk() {
