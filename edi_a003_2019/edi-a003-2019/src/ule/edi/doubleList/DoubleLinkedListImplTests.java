@@ -400,8 +400,11 @@ public class DoubleLinkedListImplTests {
 		
 		lS = new DoubleLinkedListImpl<String>("A", "B");
 		DoubleLinkedListImpl<String> manu =  new DoubleLinkedListImpl<String>("B", "C");
+		DoubleLinkedListImpl<String> dona =  new DoubleLinkedListImpl<String>("E");
+		
 		assertEquals(1, lSABC.isSubList(lS));
 		assertEquals(2, lSABC.isSubList(manu));
+		assertEquals(5,lSABCDE.isSubList(dona));
 		
 	}
 	

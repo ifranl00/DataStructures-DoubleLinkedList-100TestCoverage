@@ -658,44 +658,63 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	public int isSubList(DoubleLinkedList<T> part) {
 		
 		DoubleLinkedListImpl<T> other = new DoubleLinkedListImpl<>(part);
-		DoubleNode<T> aux0 = cab.next;
-		DoubleNode<T> aux1 = other.cab.next;
-		DoubleNode<T> aux2 = cab.next;
+		DoubleNode<T> aux0 = cab.next; //recorre la lista
+		DoubleNode<T> aux1 = other.cab.next; //recorre la sublista
+		DoubleNode<T> aux2 = cab.next; //recorre para encontrar el primero de la sublista
 		
-		int nMovs = 0; //contamos las veces que se mueve aux1 para saber si coincide con el size de esa lista
-		int pos = -1;
+		int nMovs = 1; //contamos las veces que se mueve aux1 para saber si coincide con el size de esa sublista
+		int pos = 0;
+		boolean found = false;
 		
-		if(other.isEmpty()) {
+		if(other.isEmpty()) { //si la sublista esta vacia devolvemos 1
 			
 			pos = 1;
 			
 		}else {
 			
-			while(aux0 != cab) { //hasta que llegue al final de la lista
+			while(aux0 != cab && found == false) { //hasta que llegue al final de la lista
 			
-				while(aux0.content.equals(aux1.content)) { //comparamos para encontrar el posible comienzo de una sublista
+				while(aux0.content.equals(aux1.content) && found == false) { //comparamos para encontrar el posible comienzo de una sublista
 				
-					aux0 = aux0.next;
-					aux1 = aux1.next;
-					nMovs++;
-				
-					if(nMovs == other.size()) {
+					if(nMovs == other.size()) { //hemos encontrado la sublista
 					
-						while(aux0.previous != cab && nMovs > 0) {
+						while(aux0 != cab && nMovs > 1) {
 						
 							aux0 = aux0.previous;
 							nMovs--;
 						}
-					
-						while(aux2.next != cab && aux2 != aux1) {
+						//aux0 se ha situado donde empieza la sublista en nustra lista
 						
-							aux2 = aux2.next;
-							pos++;
+						if(aux2 == aux0) { //el primer elemento es el comienzo de la sublista
+							
+							pos = 1;
+							
+						}else {
+							
+							pos = 1; //empieza en 1 porque ya no puede ser la pos 1
+							
+							while(aux2 != cab && aux2 != aux0) { //movemos un aux hasta encontrar aux0 para contar en que pos esta
+								
+								aux2 = aux2.next;
+								pos++;
+							}
 						}
+						
+						found = true;
+					}
+					
+					if (found == false) {
+						aux0 = aux0.next;
+						aux1 = aux1.next;
+						nMovs++;
 					}
 				}
 				
-				aux0 = aux0.next;
+				aux0 = aux0.next; //avanzamos si no hemos encontrado un comienzo de sublista
+			}
+			if(aux0 == cab && pos == 0) { //si no se ha encontrado la sublista
+				
+				pos = -1;
 			}
 		}
 		
@@ -706,8 +725,9 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	public void interlace(DoubleLinkedList<T> other) {
 		
 		int i = 1;
-	
-			while(other.iterator().hasNext() && i < other.size()) {
+		Iterator<T> iter = other.iterator();
+		
+			while(iter.hasNext() && i < other.size()) {
 				
 				addAtPos(other.iterator().next(), i + 1);
 				i++;
