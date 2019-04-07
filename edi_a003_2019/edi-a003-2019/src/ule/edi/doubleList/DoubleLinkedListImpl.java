@@ -664,7 +664,7 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 		
 		int nMovs = 1; //contamos las veces que se mueve aux1 para saber si coincide con el size de esa sublista
 		int pos = 0;
-		boolean found = false;
+		int found = 0; //inicializamos a 1 es decir a que no lo ha encontrado
 		
 		if(other.isEmpty()) { //si la sublista esta vacia devolvemos 1
 			
@@ -672,11 +672,12 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 			
 		}else {
 			
-			while(aux0 != cab && found == false) { //hasta que llegue al final de la lista
+			while(aux0 != cab && found != 2) { //hasta que llegue al final de la lista
 			
-				while(aux0.content.equals(aux1.content) && found == false) { //comparamos para encontrar el posible comienzo de una sublista
+				while(aux0.content.equals(aux1.content) && found != 2) { //comparamos para encontrar el posible comienzo de una sublista
 				
-					if(nMovs == other.size()) { //hemos encontrado la sublista
+					found = 1; //hemos encontrado un posible comienzo de sublista
+					if(nMovs == other.size()) { 
 					
 						while(aux0 != cab && nMovs > 1) {
 						
@@ -688,6 +689,10 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 						if(aux2 == aux0) { //el primer elemento es el comienzo de la sublista
 							
 							pos = 1;
+							if(other.size() == 1) {
+								
+								found = 2; //hemos encontrado la sublista
+							}
 							
 						}else {
 							
@@ -699,20 +704,25 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 								pos++;
 							}
 						}
+						found = 2; //hemos encontrado la sublista
 						
-						found = true;
 					}
 					
-					if (found == false) {
+					if (found == 1) { //si hemos encontrado un posible comienzo de sublista
 						aux0 = aux0.next;
 						aux1 = aux1.next;
 						nMovs++;
 					}
 				}
-				
+				//llega a este punto si no se ha encontrado el comienzo de la sublista (found = 0) o si no era esa sublista (found = 1)
 				aux0 = aux0.next; //avanzamos si no hemos encontrado un comienzo de sublista
+				if(found == 1) { //volvemos a situar el auxiliar de la otra lista
+					aux1 = other.cab.next; 
+					found = 0;
+					nMovs = 1;
+				}
 			}
-			if(aux0 == cab && pos == 0) { //si no se ha encontrado la sublista
+			if(aux0 == cab && found != 2) { //si no se ha encontrado la sublista
 				
 				pos = -1;
 			}

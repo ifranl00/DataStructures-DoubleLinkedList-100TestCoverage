@@ -393,8 +393,12 @@ public class DoubleLinkedListImplTests {
 		
 		lS = new DoubleLinkedListImpl<String>("M", "A", "N", "U");
 		lSABCDE = new DoubleLinkedListImpl<>("A", "C");
+		DoubleLinkedListImpl<String> jin =  new DoubleLinkedListImpl<String>("A", "B", "A", "B", "C");
+		DoubleLinkedListImpl<String> suga =  new DoubleLinkedListImpl<String>("B", "A","X");
+		
 		assertEquals(-1, lSABC.isSubList(lS));
 		assertEquals(-1, lSABC.isSubList(lSABCDE));
+		assertEquals(-1, jin.isSubList(suga));
 	}
 	
 	
@@ -404,10 +408,26 @@ public class DoubleLinkedListImplTests {
 		lS = new DoubleLinkedListImpl<String>("A", "B");
 		DoubleLinkedListImpl<String> manu =  new DoubleLinkedListImpl<String>("B", "C");
 		DoubleLinkedListImpl<String> dona =  new DoubleLinkedListImpl<String>("E");
+		DoubleLinkedListImpl<String> lisa =  new DoubleLinkedListImpl<String>("A", "B", "A", "B", "C", "X", "A");
+		DoubleLinkedListImpl<String> rose =  new DoubleLinkedListImpl<String>("B", "C", "X");
+		DoubleLinkedListImpl<String> jin =  new DoubleLinkedListImpl<String>("A", "B", "A", "B", "C");
+		DoubleLinkedListImpl<String> suga =  new DoubleLinkedListImpl<String>("B", "A");
+		DoubleLinkedListImpl<String> jhope =  new DoubleLinkedListImpl<String>("A", "B", "A", "B");
+		DoubleLinkedListImpl<String> jimin =  new DoubleLinkedListImpl<String>("A", "B");
+		DoubleLinkedListImpl<String> jk =  new DoubleLinkedListImpl<String>("A");
+		DoubleLinkedListImpl<String> rm =  new DoubleLinkedListImpl<String>("C");
+		
+		
 		
 		assertEquals(1, lSABC.isSubList(lS));
 		assertEquals(2, lSABC.isSubList(manu));
 		assertEquals(5,lSABCDE.isSubList(dona));
+		assertEquals(3,lSABCDE.isSubList(rm));
+		assertEquals(1,lSABCDE.isSubList(jk));
+		
+		assertEquals(2,jin.isSubList(suga));
+		assertEquals(1,jhope.isSubList(jimin));
+		assertEquals(4,lisa.isSubList(rose));
 		
 	}
 	
