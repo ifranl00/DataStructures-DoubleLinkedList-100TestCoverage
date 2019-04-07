@@ -734,13 +734,13 @@ public class DoubleLinkedListImpl<T> implements DoubleLinkedList<T> {
 	@Override
 	public void interlace(DoubleLinkedList<T> other) {
 		
-		int i = 1;
+		int i = 2;
 		Iterator<T> iter = other.iterator();
 		
-			while(iter.hasNext() && i < other.size()) {
+			while(iter.hasNext()) {
 				
-				addAtPos(other.iterator().next(), i + 1);
-				i++;
+				addAtPos(iter.next(), i);
+				i = i +2;
 			}
 	}	
 	

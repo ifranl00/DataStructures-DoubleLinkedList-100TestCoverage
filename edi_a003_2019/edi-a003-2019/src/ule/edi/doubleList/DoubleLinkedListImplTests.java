@@ -378,8 +378,13 @@ public class DoubleLinkedListImplTests {
 	public void testInterlace() {
 		
 		lS = new DoubleLinkedListImpl<String>("M", "A", "N", "U");
+		DoubleLinkedListImpl<String> jin =  new DoubleLinkedListImpl<String>("I", "R", "E", "N", "E");
 		lSABC.interlace(lS);
+		lSABCDE.interlace(jin);
+		
 		assertEquals("[A, M, B, A, C, N, U]", lSABC.toString());
+		assertEquals("[A, I, B, R, C, E, D, N, E, E]", lSABCDE.toString());
+
 	}
 	
 	@Test
